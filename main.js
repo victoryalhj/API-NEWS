@@ -1,5 +1,5 @@
 // const API_KEY = `d787306ca4424a128d6c0ff4f0061698`
-    // `https://victoria-news.netlify.app/top-headlines?country=kr&pageSize=${pageSize}&page=${page}${category}${keyword}`
+// `https://victoria-news.netlify.app/top-headlines?country=kr&pageSize=${pageSize}&page=${page}${category}${keyword}`
 let pageSize = 10;
 let page = 2;
 let category = "";
@@ -11,7 +11,13 @@ const getLatestNews = async () => {
     `https://victoria-news.netlify.app/top-headlines`
     ); 
 
-  const response = await fetch(url);
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Upgrade' : 'h2c',
+      'Connection' : 'Upgrade'
+    }
+  });
   const data = await response.json();
   newsList = data.articles;
   render();

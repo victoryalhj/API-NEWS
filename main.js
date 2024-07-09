@@ -4,8 +4,9 @@ let pageSize = 10;
 let page = 2;
 let category = "";
 let keyword = "";
-
 let newsList = [];
+
+//API
 const getLatestNews = async () => {
   const url = new URL(
     `https://victoria-news.netlify.app/top-headlines`
@@ -16,7 +17,9 @@ const getLatestNews = async () => {
   newsList = data.articles;
   render();
   console.log("ddd",newsList);
+  console.log(data)
 }
+
 
 //ui그려줌, TODO-LIST for문 ,ES6 array함수, join
 const render = () => {

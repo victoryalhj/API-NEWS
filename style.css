@@ -110,6 +110,41 @@
   height: 30px;
   padding: 10px;
  }
- .search:hover {
-
+ .search input {
+  width: 36px;
+  height: 34px;
+  border: 1px solid gray;
+  border-radius: 5px;
+  outline: none;
+  background-color: #fff;
+  transition: width .4s;
  }
+ .search input:focus {
+  width: 190px;
+ }
+ .search .search .material-icon {
+  height: 24px;
+  position: relative;
+  top: 0;
+  bottom: 0;
+  transition: .4;
+ }
+ .search .search.focused .material-icon {
+  opacity: 0;
+ }
+
+ @media (max-width: 1010px) {
+  .head-line {
+    width: 100%;
+    position: relative;
+  }
+}
+@media (max-width: 768px) {
+  .menus {
+    display: none;
+  }
+  .slide{
+    display: block;
+    position: relative;
+  }
+}

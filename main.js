@@ -1,4 +1,5 @@
 // const API_KEY = `d787306ca4424a128d6c0ff4f0061698`
+//`https://newsapi.org/v2/top-headlines?country=us&apiKey=${API_KEY}`
 // `https://victoria-news.netlify.app/top-headlines?country=kr&pageSize=${pageSize}&page=${page}${category}${keyword}`
 let pageSize = 10;
 let page = 2;

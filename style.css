@@ -144,8 +144,11 @@
   .menus {
     display: none;
   }
-  .slide{
-    display: block;
-    position: relative;
+  .sidebar {
+    display: flex;
+    position: fixed;
+    width: 50%;
   }
 }
+
+  

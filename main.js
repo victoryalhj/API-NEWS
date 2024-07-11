@@ -31,10 +31,11 @@ const render = () => {
         </div>
         <div class="col-lg-8">
           <h2>${news.title}</h2>
-          <p>${news.description}</p>
+          <p>${news.description == null || news.description == "" ? "내용없음": news.description.length > 200 ? news.description.substring(0, 200) + "..." : news.description}</p>
           <div>
-            ${news.source.name} * ${news.publishedAt}
+            ${news.source.name == null || news.source.name == ""? "no source": news.source.name} * ${news.publishedAt}
           </div>
+          
         </div>
       </div>`
     ).join('');

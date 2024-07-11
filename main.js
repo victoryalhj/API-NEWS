@@ -2,7 +2,7 @@
 //`https://newsapi.org/v2/top-headlines?country=us&apiKey=${API_KEY}`
 // `https://victoria-news.netlify.app/top-headlines?country=kr&pageSize=${pageSize}&page=${page}${category}${keyword}`
 let pageSize = 10;
-let page = 2;
+let page = 4;
 let category = "";
 let keyword = "";
 let newsList = [];
@@ -26,18 +26,15 @@ const getLatestNews = async () => {
 const render = () => {
   const newsHTML = newsList.map(
     (news) => `<div class="row news">
-         <div class="col-lg-4">
-          <img class="news-img-size" src=${news.urlToImage} alt="">
-        </div>
-        <div class="col-lg-8">
-          <h2>${news.title}</h2>
-          <p>${news.description == null || news.description == "" ? "내용없음": news.description.length > 200 ? news.description.substring(0, 200) + "..." : news.description}</p>
-          <div>
-            ${news.source.name == null || news.source.name == ""? "no source": news.source.name} * ${news.publishedAt}
-          </div>
-          
-        </div>
-      </div>`
+                <div class="col-lg-4">
+                  <img class="news-img-size" src="${news.urlToImage || 'img/noimage.png'}" onerror="this.onerror=null; this.src='img/noimage.png';" />
+                </div>
+                <div class="col-lg-8">
+                  <h2>${news.title}</h2>
+                  <p>${news.description == null || news.description == "" ? "내용없음": news.description.length > 200 ? news.description.substring(0, 200) + "..." : news.description}</p>
+                  <div>${news.source.name || "no source"} * ${moment(news.publishedAt, "YYYYMMDD").fromNow()}</div>
+                </div>
+              </div>`
     ).join('');
     console.log("html", newsHTML);
 

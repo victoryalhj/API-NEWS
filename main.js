@@ -6,13 +6,14 @@ let page = 4;
 let category = "";
 let keyword = "";
 let newsList = [];
+const menus = document.querySelectorAll(".menus button")
+menus.forEach(menu=>menu.addEventListener("click", (event)=>getNewsCategory(event)))
 
 //API
 const getLatestNews = async () => {
   const url = new URL(
     `https://victoria-news.netlify.app/top-headlines`
     ); 
-
   const response = await fetch(url);
   const data = await response.json();
   newsList = data.articles;
@@ -20,6 +21,51 @@ const getLatestNews = async () => {
   console.log("ddd",newsList);
   console.log(data)
 }
+
+//menu
+const getNewsCategory = async (event) => {
+  const category = event.target.textContent.toLowerCase();
+  console.log("category", category);
+  const url = new URL(
+    `https://victoria-news.netlify.app/top-headlines?country=kr&category=${category}`
+  );
+  const response = await fetch(url);
+  const data = await response.json();
+  console.log("ccc", data);
+
+  newsList = data.articles;
+  render();
+};
+
+//keyword
+const getNewsByKeyword= async() => {
+  const keyword = document.getElementById("search-input").value;
+  console.log("keyword", keyword);
+  const url = new URL(`https://victoria-news.netlify.app/top-headlines?country=kr&q=${keyword}`)
+  const response = await fetch(url);
+  const data = await response.json();
+  console.log("keyword data", data);
+  newsList = data.articles;
+  render();
+};
+
+//search focus 정리필요
+const searchEl = document.querySelector('.search');
+const searchInputEl = searchEl.querySelector('input')
+
+searchEl.addEventListener('click', function () {
+  searchInputEl.focus();
+});
+
+searchInputEl.addEventListener('focus', function () {
+  searchEl.classList.add('focused');
+  searchInputEl.setAttribute('placeholder', 'Search');
+});
+
+searchInputEl.addEventListener('blur', function () {
+  searchEl.classList.remove('focused');
+  searchInputEl.setAttribute('placeholder', '');
+});
 
 
 //ui그려줌, TODO-LIST for문 ,ES6 array함수, join
@@ -44,20 +90,3 @@ const render = () => {
 getLatestNews();
 
 
-//search
-const searchEl = document.querySelector('.search');
-const searchInputEl = searchEl.querySelector('input')
-
-searchEl.addEventListener('click', function () {
-  searchInputEl.focus();
-});
-
-searchInputEl.addEventListener('focus', function () {
-  searchEl.classList.add('focused');
-  searchInputEl.setAttribute('placeholder', 'Search');
-});
-
-searchInputEl.addEventListener('blur', function () {
-  searchEl.classList.remove('focused');
-  searchInputEl.setAttribute('placeholder', '');
-});

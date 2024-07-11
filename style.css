@@ -30,7 +30,7 @@
 .news {
   border-bottom: 2px solid black;
 }
-/*header sidemenu */
+/*header sidemenu 정리필요 */
 .header {
   display: flex;
 }
@@ -88,6 +88,7 @@
   height: 100%;
   background-color: lightgray;
   position: fixed;
+  margin-top: 0;
   top: 0;
   left: -300px;
   z-index: 1;

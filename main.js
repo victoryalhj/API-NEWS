@@ -9,44 +9,52 @@ let newsList = [];
 const menus = document.querySelectorAll(".menus button")
 menus.forEach(menu=>menu.addEventListener("click", (event)=>getNewsCategory(event)))
 
+let url = new URL(`https://victoria-news.netlify.app/top-headlines`)
+
+const getNews =async() => {
+  try{
+    const response = await fetch(url);
+
+    const data = await response.json();
+    if(response.status === 200){
+      if(data.articles.length === 0){
+        throw new Error("No matches for your search.");
+      }
+      newsList = data.articles;
+      render();
+    }else {
+      throw new Error(data.message)
+    }
+
+   
+  } catch(error) {
+    errorRender(error.message);
+  }
+};
+
 //API
 const getLatestNews = async () => {
-  const url = new URL(
+  url = new URL(
     `https://victoria-news.netlify.app/top-headlines`
     ); 
-  const response = await fetch(url);
-  const data = await response.json();
-  newsList = data.articles;
-  render();
-  console.log("ddd",newsList);
-  console.log(data)
+  getNews();
 }
 
 //menu
 const getNewsCategory = async (event) => {
   const category = event.target.textContent.toLowerCase();
   console.log("category", category);
-  const url = new URL(
+  url = new URL(
     `https://victoria-news.netlify.app/top-headlines?country=kr&category=${category}`
   );
-  const response = await fetch(url);
-  const data = await response.json();
-  console.log("ccc", data);
-
-  newsList = data.articles;
-  render();
+  getNews();
 };
 
 //keyword
 const getNewsByKeyword= async() => {
   const keyword = document.getElementById("search-input").value;
-  console.log("keyword", keyword);
-  const url = new URL(`https://victoria-news.netlify.app/top-headlines?country=kr&q=${keyword}`)
-  const response = await fetch(url);
-  const data = await response.json();
-  console.log("keyword data", data);
-  newsList = data.articles;
-  render();
+  url = new URL(`https://victoria-news.netlify.app/top-headlines?country=kr&q=${keyword}`)
+  getNews();
 };
 
 //search focus 정리필요
@@ -87,6 +95,16 @@ const render = () => {
   document.getElementById('news-board').innerHTML = newsHTML
 }
 
+const errorRender = (errorMessage) => {
+  const errorHTML = `<div class="alert alert-danger" role="alert">
+  ${errorMessage}
+  </div>`;
+
+  document.getElementById("news-board").innerHTML = errorHTML
+};
+
 getLatestNews();
 
+
+// A simple danger alert with <a href="#" class="alert-link">an example link</a>. Give it a click if you like.
 

@@ -1,18 +1,23 @@
 // const API_KEY = `d787306ca4424a128d6c0ff4f0061698`
 //`https://newsapi.org/v2/top-headlines?country=us&apiKey=${API_KEY}`
 // `https://victoria-news.netlify.app/top-headlines?country=kr&pageSize=${pageSize}&page=${page}${category}${keyword}`
-let pageSize = 10;
-let page = 4;
 let category = "";
 let keyword = "";
 let newsList = [];
 const menus = document.querySelectorAll(".menus button")
-menus.forEach(menu=>menu.addEventListener("click", (event)=>getNewsCategory(event)))
-
+menus.forEach(menu=>menu.addEventListener("click", (event)=>getNewsCategory(event))
+);
 let url = new URL(`https://victoria-news.netlify.app/top-headlines`)
+let totalResults = 0
+let page = 1
+const pageSize = 10
+const groupSize = 5
 
 const getNews =async() => {
   try{
+    url.searchParams.set("page",page);
+    url.searchParams.set("pageSize",pageSize);
+
     const response = await fetch(url);
 
     const data = await response.json();
@@ -21,12 +26,12 @@ const getNews =async() => {
         throw new Error("No matches for your search.");
       }
       newsList = data.articles;
+      totalResults = data.totalResults;
       render();
+      paginationRender();
     }else {
       throw new Error(data.message)
     }
-
-   
   } catch(error) {
     errorRender(error.message);
   }
@@ -37,10 +42,10 @@ const getLatestNews = async () => {
   url = new URL(
     `https://victoria-news.netlify.app/top-headlines`
     ); 
-  getNews();
+  await getNews();
 }
 
-//menu
+//Menu
 const getNewsCategory = async (event) => {
   const category = event.target.textContent.toLowerCase();
   console.log("category", category);
@@ -54,26 +59,31 @@ const getNewsCategory = async (event) => {
 const getNewsByKeyword= async() => {
   const keyword = document.getElementById("search-input").value;
   url = new URL(`https://victoria-news.netlify.app/top-headlines?country=kr&q=${keyword}`)
-  getNews();
+  await getNews();
 };
 
-//search focus 정리필요
-const searchEl = document.querySelector('.search');
-const searchInputEl = searchEl.querySelector('input')
+//Search
+const openSearchBox = () => {
+  let inputArea = document.getElementById("input-area");
+  let searchIcon = document.querySelector(".search-icon");
 
-searchEl.addEventListener('click', function () {
-  searchInputEl.focus();
-});
+  if (inputArea.style.display === "none" || inputArea.style.display === "" ) {
+    inputArea.style.display ="flex";
+    searchIcon.style.display ="none"; //검색아이콘 숨기기
+  }else {
+    inputArea.style.display = "none";
+    searchIcon.style.display = "inline-block"; //검색아이콘 보이기
+  }
+}
 
-searchInputEl.addEventListener('focus', function () {
-  searchEl.classList.add('focused');
-  searchInputEl.setAttribute('placeholder', 'Search');
-});
+//Side-menu
+const openNav = () => {
+  document.getElementById("mySidenav").style.width = "250px";
+};
 
-searchInputEl.addEventListener('blur', function () {
-  searchEl.classList.remove('focused');
-  searchInputEl.setAttribute('placeholder', '');
-});
+const closeNav = () => {
+  document.getElementById("mySidenav").style.width = "0";
+}
 
 
 //ui그려줌, TODO-LIST for문 ,ES6 array함수, join
@@ -103,8 +113,46 @@ const errorRender = (errorMessage) => {
   document.getElementById("news-board").innerHTML = errorHTML
 };
 
+
+const paginationRender = () => {
+  //totalResult, page, pageSize, groupSize
+  //totalPages
+  const totalPages = Math.ceil(totalResults/pageSize)
+  //pageGroup
+  const pageGroup = Math.ceil(page/groupSize);
+  //lastPage
+  const lastPage = pageGroup * groupSize;
+  if(lastPage > totalPages){
+    lastPage = totalPages
+  }
+  //firstPage
+  const firstPage = lastPage - (groupSize-1);
+
+  let paginationHTML = ``
+  for(let i=firstPage; i<=lastPage; i++){
+    paginationHTML+=` <li class="page-item" onclick="moveToPage(${i})"><a class="page-link">${i}</a></li>`;
+  }
+  document.querySelector(".pagination").innerHTML = paginationHTML
+
+//   <nav aria-label="Page navigation example">
+//   <ul class="pagination">
+//     <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+//     <li class="page-item"><a class="page-link" href="#">1</a></li>
+//     <li class="page-item"><a class="page-link" href="#">2</a></li>
+//     <li class="page-item"><a class="page-link" href="#">3</a></li>
+//     <li class="page-item"><a class="page-link" href="#">Next</a></li>
+//   </ul>
+// </nav>
+}
+
+const moveToPage = (pageNum) => {
+  console.log("move",pageNum);
+  page = pageNum;
+  getNews()
+}
+
 getLatestNews();
 
 
-// A simple danger alert with <a href="#" class="alert-link">an example link</a>. Give it a click if you like.
+
 

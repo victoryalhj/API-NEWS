@@ -4,16 +4,17 @@
 let category = "";
 let keyword = "";
 let newsList = [];
-const menus = document.querySelectorAll(".menus button")
-menus.forEach(menu=>menu.addEventListener("click", (event)=>getNewsCategory(event))
-);
-let url = new URL(`https://victoria-news.netlify.app/top-headlines`)
-let totalResults = 0
-let page = 1
-const pageSize = 10
-const groupSize = 5
+let url = new URL(`https://victoria-news.netlify.app/top-headlines`);
+let totalResults = 0;
+let page = 1;
+const pageSize = 10;
+const groupSize = 5;
 
-const getNews =async() => {
+const categories = ['Entertainment','General','Health','Science','Sports','Technology'];
+const menus = document.querySelectorAll(".menus button");
+menus.forEach(menu => menu.addEventListener("click", (event)=> getNewsCategory(event)));
+
+const getNews = async() => {
   try{
     url.searchParams.set("page",page);
     url.searchParams.set("pageSize",pageSize);
@@ -39,24 +40,24 @@ const getNews =async() => {
 
 //API
 const getLatestNews = async () => {
-  url = new URL(
-    `https://victoria-news.netlify.app/top-headlines`
-    ); 
+  url = new URL(`https://victoria-news.netlify.app/top-headlines`); 
+    url.searchParams.set("country", "kr");
   await getNews();
 }
 
 //Menu
 const getNewsCategory = async (event) => {
-  const category = event.target.textContent.toLowerCase();
-  console.log("category", category);
+  const selectedCategory = event.target.textContent.toLowerCase();
   url = new URL(
     `https://victoria-news.netlify.app/top-headlines?country=kr&category=${category}`
   );
+  url.searchParams.set("country", "kr");
+  url.searchParams.set("category", selectedCategory);
   await getNews();
 };
 
 //keyword
-const getNewsByKeyword= async() => {
+const getNewsByKeyword = async() => {
   const keyword = document.getElementById("search-input").value;
   url = new URL(`https://victoria-news.netlify.app/top-headlines?country=kr&q=${keyword}`)
   await getNews();
@@ -115,17 +116,12 @@ const errorRender = (errorMessage) => {
 
 
 const paginationRender = () => {
-  //totalResult, page, pageSize, groupSize
-  //totalPages
   const totalPages = Math.ceil(totalResults/pageSize)
-  //pageGroup
-  const pageGroup = Math.ceil(page/groupSize);
-  //lastPage
-  const lastPage = pageGroup * groupSize;
+  let pageGroup = Math.ceil(page/groupSize);
+  let lastPage = pageGroup * groupSize;
   if(lastPage > totalPages){
     lastPage = totalPages
   }
-  //firstPage
   const firstPage = lastPage - (groupSize-1)<=0? 1: lastPage - (groupSize - 1);
   
   let paginationHTML = `<li class="page-item" onclick="moveToPage(${page-1})"><a class="page-link" href="#">Previous</a></li>`;

@@ -31,7 +31,7 @@
   border-bottom: 2px solid black;
 }
 
-/*header sidemenu 정리필요 */
+/* Sidemenu */
 .SideMenuAndSearch {
   margin: 20px 0;
   display: flex;
@@ -72,7 +72,7 @@
   height: 100%;
   width: 0;
   position: fixed;
-  z-index: 1;
+  z-index: 2;
   top: 0;
   left: 0;
   background: lightgray;

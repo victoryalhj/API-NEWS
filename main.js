@@ -53,6 +53,7 @@ const getNewsCategory = async (event) => {
   );
   url.searchParams.set("country", "kr");
   url.searchParams.set("category", selectedCategory);
+  page = 1;
   await getNews();
 };
 

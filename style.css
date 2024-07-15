@@ -107,13 +107,12 @@
   margin-top: 20px;
 }
 
-
- @media (max-width: 1010px) {
-  .head-line {
-    width: 100%;
-    position: relative;
-  }
+@media (min-width: 769px){
+  .menu-icon {
+    display: none;
+   }
 }
+
 @media (max-width: 768px) {
   .menus {
     display: none;
@@ -122,6 +121,16 @@
     display: flex;
     position: fixed;
     width: 50%;
+  }
+   .menu-icon {
+    display: block;
+   }
+}
+
+@media (max-width: 1010px) {
+  .head-line {
+    width: 100%;
+    position: relative;
   }
 }
 
